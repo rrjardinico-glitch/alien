@@ -22,8 +22,8 @@ export class EnrollmentController {
 
   // Create enrollment (open - for demo)
   @Post()
-  async create(@Body() body: { student_ID: string, Course_id: string, Semester: string, GWA: number }) {
-    return this.enrollmentService.createEnrollment(body.student_ID, body.Course_id, body.Semester, body.GWA);
+  async create(@Body() body: { student_ID: string, Course_id: string, Semester: string, Total_grade?: number }) {
+    return this.enrollmentService.createEnrollment(body.student_ID, body.Course_id, body.Semester, body.Total_grade);
   }
 
   // Update enrollment (protected)

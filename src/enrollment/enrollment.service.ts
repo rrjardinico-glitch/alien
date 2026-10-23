@@ -8,12 +8,12 @@ export class EnrollmentService {
 
   private pool = () => this.db.getPool();
 
-  async createEnrollment(student_ID: string, Course_id: string, Semester: string, GWA: number) {
+  async createEnrollment(student_ID: string, Course_id: string, Semester: string, Total_grade = 0.00) {
     const [result] = await this.pool().execute<OkPacket>(
-      'INSERT INTO enrollment (student_ID, Course_id, Semester, GWA) VALUES (?, ?, ?, ?)',
-      [student_ID, Course_id, Semester, GWA],
+      'INSERT INTO enrollment (student_ID, Course_id, Semester, Total_grade) VALUES (?, ?, ?, ?)',
+      [student_ID, Course_id, Semester, Total_grade],
     );
-    return { id: result.insertId, student_ID, Course_id, Semester, GWA };
+    return { id: result.insertId, student_ID, Course_id, Semester, Total_grade };
   }
 
   async findById(id: number) {
@@ -31,7 +31,7 @@ export class EnrollmentService {
     return rows;
   }
 
-  async updateEnrollment(id: number, partial: { student_ID?: string; Course_id?: string; Semester?: string; GWA?: number }) {
+  async updateEnrollment(id: number, partial: { student_ID?: string; Course_id?: string; Semester?: string; Total_grade?: number }) {
     const fields: string[] = [];
     const values: any[] = [];
 
@@ -50,9 +50,9 @@ export class EnrollmentService {
       values.push(partial.Semester);
     }
 
-    if (partial.GWA !== undefined) {
-      fields.push('GWA = ?');
-      values.push(partial.GWA);
+    if (partial.Total_grade !== undefined) {
+      fields.push('Total_grade = ?');
+      values.push(partial.Total_grade);
     }
 
     if (fields.length === 0) return await this.findById(id);
